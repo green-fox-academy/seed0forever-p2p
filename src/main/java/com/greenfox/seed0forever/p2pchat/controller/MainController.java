@@ -12,8 +12,14 @@ public class MainController {
 
   @RequestMapping("")
   public String showMainPage(Model model) {
-    System.out.println(
-            new LogEntry("/", "GET", "INFO", new Timestamp(System.currentTimeMillis()), "/"));
+    String currentLogLevel = System.getenv("CHAT_APP_LOGLEVEL");
+
+    if (currentLogLevel.equals("INFO")) {
+
+      System.out.println(
+              new LogEntry("/", "GET", "INFO", new Timestamp(System.currentTimeMillis()),
+                      "/"));
+    }
 
     model.addAttribute("developedBy", "seed0forever");
     return "index";
