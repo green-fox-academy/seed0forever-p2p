@@ -14,11 +14,13 @@ public class MainController {
   public String showMainPage(Model model) {
     String currentLogLevel = System.getenv("CHAT_APP_LOGLEVEL");
 
-    if (currentLogLevel.equals("INFO")) {
+    if (currentLogLevel != null && currentLogLevel.equals("INFO")) {
 
       System.out.println(
               new LogEntry("/", "GET", "INFO", new Timestamp(System.currentTimeMillis()),
                       "/"));
+    } else {
+      System.out.println("No INFO in loglevel variable");
     }
 
     model.addAttribute("developedBy", "seed0forever");
