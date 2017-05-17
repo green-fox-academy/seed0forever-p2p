@@ -1,7 +1,8 @@
 package com.greenfox.seed0forever.p2pchat.controller;
 
-import com.greenfox.seed0forever.p2pchat.model.LogEntry;
+import com.greenfox.seed0forever.p2pchat.service.LogService;
 import java.sql.Timestamp;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,33 +18,25 @@ public class MainController {
   // read from environment variable CHAT_APP_PEER_ADDRESSS
   private String chatAppPeerAddress;
 
-  public MainController() {
+  private LogService logService;
+
+  @Autowired
+  public MainController(LogService logService) {
+    super();
+    this.logService = logService;
+
     this.chatAppUniqueId = System.getenv("CHAT_APP_UNIQUE_ID");
     this.chatAppPeerAddress = System.getenv("CHAT_APP_PEER_ADDRESSS");
   }
 
   @RequestMapping("")
   public String showMainPage(Model model) {
-    printLogIfNeeded();
-
+    logService.printLogIfNeeded("/", "GET", "INFO",
+            new Timestamp(System.currentTimeMillis()), "/");
 
     model.addAttribute("developedBy", "seed0forever");
     model.addAttribute("chatAppUniqueId", chatAppUniqueId);
     model.addAttribute("chatAppPeerAddress", chatAppPeerAddress);
     return "index";
   }
-
-  private void printLogIfNeeded() {
-    String currentLogLevel = System.getenv("CHAT_APP_LOGLEVEL");
-
-    if (currentLogLevel != null && currentLogLevel.equals("INFO")) {
-
-      System.out.println(
-              new LogEntry("/", "GET", "INFO", new Timestamp(System.currentTimeMillis()),
-                      "/"));
-    } else {
-      System.out.println("No INFO in loglevel variable");
-    }
-  }
-
 }

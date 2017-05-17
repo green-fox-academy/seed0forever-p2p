@@ -15,6 +15,13 @@ public class User {
   private long id;
   private String username;
 
+  public User() {
+  }
+
+  public User(String username) {
+    this.username = username;
+  }
+
   public long getId() {
     return id;
   }
@@ -28,6 +35,6 @@ public class User {
   }
 
   public void setUsername(String username) {
-    username = username;
+    this.username = username;
   }
 }

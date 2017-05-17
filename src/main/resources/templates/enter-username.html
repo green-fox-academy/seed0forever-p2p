@@ -10,8 +10,9 @@
 <body>
 
 <h1>Enter</h1>
-<!--/*@thymesVar id="currentUser" type="com.greenfox.seed0forever.p2pchat.model.User"*/-->
-<form action="#" th:action="@{/enter}" th:object="${currentUser}" method="post">
+<!--/*@thymesVar id="userToAdd" type="com.greenfox.seed0forever.p2pchat.model.User"*/-->
+<form action="#" th:action="@{/enter}" th:object="${userToAdd}" method="post">
+  <input type="hidden" th:field="*{id}"/>
   <table>
     <tr>
       <td><label>Username: <input type="text" th:field="*{username}" /></label></td>
