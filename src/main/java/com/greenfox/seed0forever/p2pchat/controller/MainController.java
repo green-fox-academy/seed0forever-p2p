@@ -24,6 +24,16 @@ public class MainController {
 
   @RequestMapping("")
   public String showMainPage(Model model) {
+    printLogIfNeeded();
+
+
+    model.addAttribute("developedBy", "seed0forever");
+    model.addAttribute("chatAppUniqueId", chatAppUniqueId);
+    model.addAttribute("chatAppPeerAddress", chatAppPeerAddress);
+    return "index";
+  }
+
+  private void printLogIfNeeded() {
     String currentLogLevel = System.getenv("CHAT_APP_LOGLEVEL");
 
     if (currentLogLevel != null && currentLogLevel.equals("INFO")) {
@@ -34,11 +44,6 @@ public class MainController {
     } else {
       System.out.println("No INFO in loglevel variable");
     }
-
-    model.addAttribute("developedBy", "seed0forever");
-    model.addAttribute("chatAppUniqueId", chatAppUniqueId);
-    model.addAttribute("chatAppPeerAddress", chatAppPeerAddress);
-    return "index";
   }
 
 }
