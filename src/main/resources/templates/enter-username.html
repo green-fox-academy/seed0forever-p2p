@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Peer to Peer Chat Program</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+
+<body>
+
+<h1>Enter</h1>
+<!--/*@thymesVar id="currentUser" type="com.greenfox.seed0forever.p2pchat.model.User"*/-->
+<form action="#" th:action="@{/enter}" th:object="${currentUser}" method="post">
+  <table>
+    <tr>
+      <td><label>Username: <input type="text" th:field="*{username}" /></label></td>
+      <td><input type="submit" value="Enter"/></td>
+    </tr>
+  </table>
+</form>
+</body>
+
+</html>
