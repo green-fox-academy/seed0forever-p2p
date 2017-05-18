@@ -26,9 +26,7 @@ public class LogService {
                       timestamp,
                       requestData));
 
-    } else if (
-            systemLogLevel.equalsIgnoreCase("ERROR")
-                    && eventLogLevel.equalsIgnoreCase("ERROR")) {
+    } else if (eventLogLevel.equalsIgnoreCase("ERROR")) {
 
       System.out.println(
               new LogEntry(
@@ -39,7 +37,8 @@ public class LogService {
                       requestData));
 
     } else {
-      System.out.println("No INFO or ERROR fount in loglevel variable");
+      System.out.printf("[debug]: LogService was called with a %s level event%n", eventLogLevel);
+      System.out.printf("[debug]: but system environment CHAT_APP_LOGLEVEL is %s%n", systemLogLevel);
     }
   }
 }
