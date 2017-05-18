@@ -28,6 +28,11 @@
     <p>App</p>
     <p>Hi there! Submit your message using the send button!</p>
   </li>
+  <!--/*@thymesVar id="messageList" type="java.util.List<com.greenfox.seed0forever.p2pchat.model.Message>"*/-->
+  <li th:each="messageElement: ${messageList}">
+    <p th:text="${messageElement.username}">Usename</p>
+    <p th:text="${messageElement.text}">Message</p>
+  </li>
 </ul>
 
 <!--/*@thymesVar id="messageToAdd" type="com.greenfox.seed0forever.p2pchat.model.Message"*/-->

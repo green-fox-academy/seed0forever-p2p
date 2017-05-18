@@ -56,6 +56,8 @@ public class MainController {
 
       model.addAttribute("currentUser", currentUser);
       model.addAttribute("messageToAdd", messageToAdd);
+      model.addAttribute("messageList", messageService.listAll());
+
       model.addAttribute("developedBy", "seed0forever");
       model.addAttribute("chatAppUniqueId", chatAppUniqueId);
       model.addAttribute("chatAppPeerAddress", chatAppPeerAddress);
