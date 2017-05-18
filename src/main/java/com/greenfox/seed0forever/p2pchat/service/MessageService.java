@@ -17,6 +17,9 @@ public class MessageService {
   }
 
   public void save(Message message) {
+    while (messageRepository.exists(message.getId())) {
+      message.generateAndSetRandomId();
+    }
     messageRepository.save(message);
   }
 
