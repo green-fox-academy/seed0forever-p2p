@@ -37,20 +37,20 @@ public class EnterController {
   }
 
   @PostMapping("")
-  public String saveUserName(User postedUser) {
+  public String saveUserName(User userToAdd) {
     logService.printLogIfNeeded("/enter", "POST", "INFO",
             new Timestamp(System.currentTimeMillis()),
             "received User fields: id="
-                    + postedUser.getId()
+                    + userToAdd.getId()
                     + ", username="
-                    + postedUser.getUsername());
+                    + userToAdd.getUsername());
 
-    if (postedUser.getUsername() != null
-            && userService.doesUserExist(postedUser.getUsername())) {
+    if (userToAdd.getUsername() != null
+            && userService.doesUserExist(userToAdd.getUsername())) {
       return "redirect:/";
 
     } else {
-      userService.addUser(postedUser);
+      userService.addUser(userToAdd);
     }
     return "redirect:/";
   }
