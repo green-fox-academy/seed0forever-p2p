@@ -8,7 +8,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
 
+  @Override
   List<User> findAll();
 
   User findFirstByUsernameIgnoreCase(String username);
+
+  @Override
+    User save(User user);
 }
