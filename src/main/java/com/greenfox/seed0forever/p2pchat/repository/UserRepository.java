@@ -14,5 +14,8 @@ public interface UserRepository extends CrudRepository<User, Long> {
   User findFirstByUsernameIgnoreCase(String username);
 
   @Override
-    User save(User user);
+  User findOne(Long id);
+
+  @Override
+  User save(User user);
 }

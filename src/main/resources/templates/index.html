@@ -23,6 +23,20 @@
 </form>
 
 
+<ul>
+  <li>
+    <p>App</p>
+    <p>Hi there! Submit your message using the send button!</p>
+  </li>
+</ul>
+
+<!--/*@thymesVar id="messageToAdd" type="com.greenfox.seed0forever.p2pchat.model.Message"*/-->
+<form action="#" th:action="@{/save-message}" th:object="${messageToAdd}" method="post">
+  <textarea rows="10" cols="50" th:field="*{text}"></textarea>
+  <input type="hidden" th:field="*{id}"/>
+  <input type="submit" value="Send"/>
+</form>
+
 <!--/*@thymesVar id="developedBy" type="java.lang.String"*/-->
 <p th:text="'Created by ' + ${developedBy}"/>
 <!--/*@thymesVar id="chatAppUniqueId" type="java.lang.String"*/-->

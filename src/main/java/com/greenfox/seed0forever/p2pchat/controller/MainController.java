@@ -1,7 +1,9 @@
 package com.greenfox.seed0forever.p2pchat.controller;
 
+import com.greenfox.seed0forever.p2pchat.model.Message;
 import com.greenfox.seed0forever.p2pchat.model.User;
 import com.greenfox.seed0forever.p2pchat.service.LogService;
+import com.greenfox.seed0forever.p2pchat.service.MessageService;
 import com.greenfox.seed0forever.p2pchat.service.UserService;
 import java.sql.Timestamp;
 import java.util.List;
@@ -24,19 +26,22 @@ public class MainController {
 
   private LogService logService;
   private UserService userService;
+  private MessageService messageService;
 
   @Autowired
-  public MainController(LogService logService, UserService userService) {
+  public MainController(LogService logService, UserService userService,
+          MessageService messageService) {
     super();
     this.logService = logService;
     this.userService = userService;
+    this.messageService = messageService;
 
     this.chatAppUniqueId = System.getenv("CHAT_APP_UNIQUE_ID");
     this.chatAppPeerAddress = System.getenv("CHAT_APP_PEER_ADDRESSS");
   }
 
   @RequestMapping("")
-  public String showMainPage(Model model) {
+  public String showMainPage(Model model, Message messageToAdd) {
     logService.printLogIfNeeded("/", "GET", "INFO",
             new Timestamp(System.currentTimeMillis()), "/");
 
@@ -50,6 +55,7 @@ public class MainController {
       User currentUser = userService.findUser(1L);
 
       model.addAttribute("currentUser", currentUser);
+      model.addAttribute("messageToAdd", messageToAdd);
       model.addAttribute("developedBy", "seed0forever");
       model.addAttribute("chatAppUniqueId", chatAppUniqueId);
       model.addAttribute("chatAppPeerAddress", chatAppPeerAddress);
@@ -72,6 +78,14 @@ public class MainController {
     currentUser.setId(1L); // failsafe setting: should already have id=1L
     userService.addUser(currentUser);
 
+    return "redirect:/";
+  }
+
+  @PostMapping("/save-message")
+  public String saveMessage(Message message) {
+    message.setUsername(userService.findUser(1L).getUsername());
+    message.createAndSetNewTimestamp();
+    messageService.save(message);
     return "redirect:/";
   }
 
