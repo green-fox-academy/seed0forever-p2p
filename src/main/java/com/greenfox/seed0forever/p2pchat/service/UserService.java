@@ -2,6 +2,7 @@ package com.greenfox.seed0forever.p2pchat.service;
 
 import com.greenfox.seed0forever.p2pchat.model.User;
 import com.greenfox.seed0forever.p2pchat.repository.UserRepository;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,10 @@ public class UserService {
 
   public void addUser(User user) {
     userRepository.save(user);
+  }
+
+  public List<User> listAllUsers() {
+    return userRepository.findAll();
   }
 
   public boolean doesUserExist(String username) {
