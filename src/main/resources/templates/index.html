@@ -10,6 +10,19 @@
 <body>
 
 <h1>Peer to Peer Chat Program</h1>
+
+<!--/*@thymesVar id="currentUser" type="com.greenfox.seed0forever.p2pchat.model.User"*/-->
+<form action="#" th:action="@{/update}" th:object="${currentUser}" method="post">
+  <input type="hidden" th:field="*{id}"/>
+  <table>
+    <tr>
+      <td><label>Your username: <input type="text" th:field="*{username}"/></label></td>
+      <td><input type="submit" value="Update"/></td>
+    </tr>
+  </table>
+</form>
+
+
 <!--/*@thymesVar id="developedBy" type="java.lang.String"*/-->
 <p th:text="'Created by ' + ${developedBy}"/>
 <!--/*@thymesVar id="chatAppUniqueId" type="java.lang.String"*/-->

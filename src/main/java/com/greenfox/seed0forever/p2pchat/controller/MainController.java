@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -39,12 +40,39 @@ public class MainController {
     logService.printLogIfNeeded("/", "GET", "INFO",
             new Timestamp(System.currentTimeMillis()), "/");
 
-    model.addAttribute("developedBy", "seed0forever");
-    model.addAttribute("chatAppUniqueId", chatAppUniqueId);
-    model.addAttribute("chatAppPeerAddress", chatAppPeerAddress);
+    // redirect to '/enter' if there is no user yet
+    // or if current user has an empty name
+    if (!userService.doesUserExist(1L)
+            || userService.findUser(1L).hasEmptyName()) {
+      return "redirect:/enter";
 
-    printList(userService.listAllUsers());
-    return "index";
+    } else {
+      User currentUser = userService.findUser(1L);
+
+      model.addAttribute("currentUser", currentUser);
+      model.addAttribute("developedBy", "seed0forever");
+      model.addAttribute("chatAppUniqueId", chatAppUniqueId);
+      model.addAttribute("chatAppPeerAddress", chatAppPeerAddress);
+
+      printList(userService.listAllUsers()); // TODO: remove (it's just for debug purposes)
+
+      return "index";
+    }
+  }
+
+  @PostMapping("/update")
+  public String changeCurrentUser(User currentUser) {
+    logService.printLogIfNeeded("/update", "POST", "INFO",
+            new Timestamp(System.currentTimeMillis()),
+            "received User fields: id="
+                    + currentUser.getId()
+                    + ", username="
+                    + currentUser.getUsername());
+
+    currentUser.setId(1L); // failsafe setting: should already have id=1L
+    userService.addUser(currentUser);
+
+    return "redirect:/";
   }
 
   private void printList(List<User> users) {

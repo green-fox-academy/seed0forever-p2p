@@ -28,11 +28,18 @@ public class EnterController {
   }
 
   @GetMapping("")
-  public String enterUsername(Model model, User user) {
+  public String enterUsername(Model model, User userToAdd) {
     logService.printLogIfNeeded("/enter", "GET", "INFO",
-            new Timestamp(System.currentTimeMillis()), "");
+            new Timestamp(System.currentTimeMillis()), "/");
 
-    model.addAttribute("userToAdd", user);
+    // redirect to main page if a user with a non-empty name already exists
+    if (userService.doesUserExist(1L)
+            && !userService.findUser(1L).hasEmptyName()) {
+      return "redirect:/";
+    }
+
+    userToAdd.setId(1L); // we want to have just one User in the database
+    model.addAttribute("userToAdd", userToAdd);
     return "enter-username";
   }
 
@@ -45,14 +52,13 @@ public class EnterController {
                     + ", username="
                     + userToAdd.getUsername());
 
-    if (userToAdd.getUsername() != null
-            && userService.doesUserExist(userToAdd.getUsername())) {
-      return "redirect:/";
+    if (userToAdd.hasEmptyName()) {
+      return "redirect:/enter";
 
     } else {
+      userToAdd.setId(1L); // failsafe setting: should already have id=1L
       userService.addUser(userToAdd);
     }
     return "redirect:/";
   }
-
 }

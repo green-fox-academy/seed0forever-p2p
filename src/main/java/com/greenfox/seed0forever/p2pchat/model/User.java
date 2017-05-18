@@ -18,16 +18,16 @@ public class User {
   public User() {
   }
 
+  public User(String username) {
+    this.username = username;
+  }
+
   @Override
   public String toString() {
     return "User{" +
             "id=" + id +
             ", username='" + username + '\'' +
             '}';
-  }
-
-  public User(String username) {
-    this.username = username;
   }
 
   public long getId() {
@@ -44,5 +44,10 @@ public class User {
 
   public void setUsername(String username) {
     this.username = username;
+  }
+
+  public boolean hasEmptyName() {
+    return username == null
+            || username.equals("");
   }
 }

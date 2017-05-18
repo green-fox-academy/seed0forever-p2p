@@ -20,6 +20,10 @@ public class UserService {
     userRepository.save(user);
   }
 
+  public User findUser(long id) {
+    return userRepository.findOne(id);
+  }
+
   public List<User> listAllUsers() {
     return userRepository.findAll();
   }
@@ -30,4 +34,9 @@ public class UserService {
             != null;
   }
 
+  public boolean doesUserExist(long id) {
+    return userRepository
+            .findOne(id)
+            != null;
+  }
 }
