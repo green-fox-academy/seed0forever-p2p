@@ -16,7 +16,7 @@ public class MessageService {
     this.messageRepository = messageRepository;
   }
 
-  public void save(Message message) {
+  public void saveWithoutIdCollision(Message message) {
     while (messageRepository.exists(message.getId())) {
       message.generateAndSetRandomId();
     }

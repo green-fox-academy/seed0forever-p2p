@@ -51,7 +51,6 @@ public class MessageRestController {
             "INFO",
             receivedRestMessage.toString());
 
-    messageService.save(receivedRestMessage.getMessage());
 
     boolean messageIsFromThisClient = receivedRestMessage
             .getClient()
@@ -61,6 +60,8 @@ public class MessageRestController {
     if (!messageIsFromThisClient) {
       broadcastService.forwardMessage(receivedRestMessage);
     }
+
+    messageService.saveWithoutIdCollision(receivedRestMessage.getMessage());
 
     return new OkRestMessage("ok");
   }
