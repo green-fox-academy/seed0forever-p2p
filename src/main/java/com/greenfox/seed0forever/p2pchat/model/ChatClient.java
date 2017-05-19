@@ -19,4 +19,11 @@ public class ChatClient {
   public void setId(String id) {
     this.id = id;
   }
+
+  @Override
+  public String toString() {
+    return "ChatClient{" +
+            "id='" + id + '\'' +
+            '}';
+  }
 }

@@ -23,11 +23,22 @@ public class Message {
     this.id = generateRandomId();
     this.timestamp = new Timestamp(System.currentTimeMillis());
   }
+
   public Message(String username, String text) {
     this();
 
     this.username = username;
     this.text = text;
+  }
+
+  @Override
+  public String toString() {
+    return "Message{" +
+            "id=" + id +
+            ", username='" + username + '\'' +
+            ", text='" + text + '\'' +
+            ", timestamp=" + timestamp +
+            '}';
   }
 
   public String getUsername() {
