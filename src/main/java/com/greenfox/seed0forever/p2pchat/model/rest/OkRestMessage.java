@@ -22,7 +22,11 @@ public class OkRestMessage implements RestMessageObject {
   @Override
   public String toString() {
     return "OkRestMessage{" +
-            "status='" + status + '\'' +
+            "status='" +
+            ((status != null)
+                    ? status
+                    : "null") +
+            '\'' +
             '}';
   }
 }

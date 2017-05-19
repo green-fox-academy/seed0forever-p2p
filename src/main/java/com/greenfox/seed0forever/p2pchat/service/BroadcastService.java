@@ -47,6 +47,7 @@ public class BroadcastService {
     OkRestMessage testPostResponse = restTemplate
             .postForObject(url, chatRestMessage, OkRestMessage.class);
 
+/*
     logService.printLogIfNeeded(
             "/save-message",
             "POST response",
@@ -55,5 +56,6 @@ public class BroadcastService {
                     + url
                     + ", message = " + chatRestMessage.toString()
                     + ", response = " + testPostResponse.toString());
+*/
   }
 }

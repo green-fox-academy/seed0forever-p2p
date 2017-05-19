@@ -65,8 +65,6 @@ public class MainController {
       model.addAttribute("messageList", messageService.listAll());
 
       model.addAttribute("developedBy", "seed0forever");
-      model.addAttribute("chatAppUniqueId", chatAppUniqueId);
-      model.addAttribute("chatAppPeerAddress", chatAppPeerAddress);
 
       printList(userService.listAllUsers()); // TODO: remove (it's just for debug purposes)
 
@@ -96,9 +94,10 @@ public class MainController {
     message.setUsername(userService.findUser(1L).getUsername());
     message.createAndSetNewTimestamp();
 
+    broadcastService.forwardMessage(message);
+
     messageService.saveWithoutIdCollision(message);
 
-    broadcastService.forwardMessage(message);
 
     return "redirect:/";
   }
