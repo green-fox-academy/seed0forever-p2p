@@ -28,7 +28,7 @@ public class MessageRestController {
   }
 
   @PostMapping("/receive")
-  public OkRestMessage receiveMessage(@RequestBody ChatRestMessage receivedRestMessage) {
+  public RestMessageObject receiveMessage(@RequestBody ChatRestMessage receivedRestMessage) {
     logService.printLogIfNeeded(
             "/api/message/receive",
             "POST",
