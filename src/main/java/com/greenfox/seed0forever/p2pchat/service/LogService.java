@@ -11,10 +11,10 @@ public class LogService {
           String path,
           String method,
           String eventLogLevel,
-          Timestamp timestamp,
           String requestData) {
 
     String systemLogLevel = System.getenv("CHAT_APP_LOGLEVEL");
+    Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
 
     if (systemLogLevel != null && systemLogLevel.equalsIgnoreCase("INFO")) {
 
@@ -23,7 +23,7 @@ public class LogService {
                       path,
                       method,
                       eventLogLevel,
-                      timestamp,
+                      currentTimeStamp,
                       requestData));
 
     } else if (eventLogLevel.equalsIgnoreCase("ERROR")) {
@@ -33,7 +33,7 @@ public class LogService {
                       path,
                       method,
                       eventLogLevel,
-                      timestamp,
+                      currentTimeStamp,
                       requestData));
 
     } else {

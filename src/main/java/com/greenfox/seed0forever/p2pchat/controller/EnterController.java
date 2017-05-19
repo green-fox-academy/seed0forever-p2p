@@ -29,8 +29,11 @@ public class EnterController {
 
   @GetMapping("")
   public String enterUsername(Model model, User userToAdd) {
-    logService.printLogIfNeeded("/enter", "GET", "INFO",
-            new Timestamp(System.currentTimeMillis()), "/");
+    logService.printLogIfNeeded(
+            "/enter",
+            "GET",
+            "INFO",
+            "/");
 
     // redirect to main page if a user with a non-empty name already exists
     if (userService.doesUserExist(1L)
@@ -45,8 +48,10 @@ public class EnterController {
 
   @PostMapping("")
   public String saveUserName(User userToAdd) {
-    logService.printLogIfNeeded("/enter", "POST", "INFO",
-            new Timestamp(System.currentTimeMillis()),
+    logService.printLogIfNeeded(
+            "/enter",
+            "POST",
+            "INFO",
             "received User fields: id="
                     + userToAdd.getId()
                     + ", username="

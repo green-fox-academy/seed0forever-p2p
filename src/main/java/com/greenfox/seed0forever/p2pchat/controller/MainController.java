@@ -42,8 +42,11 @@ public class MainController {
 
   @RequestMapping("")
   public String showMainPage(Model model, Message messageToAdd) {
-    logService.printLogIfNeeded("/", "GET", "INFO",
-            new Timestamp(System.currentTimeMillis()), "/");
+    logService.printLogIfNeeded(
+            "/",
+            "GET",
+            "INFO",
+            "/");
 
     // redirect to '/enter' if there is no user yet
     // or if current user has an empty name
@@ -70,8 +73,10 @@ public class MainController {
 
   @PostMapping("/update")
   public String changeCurrentUser(User currentUser) {
-    logService.printLogIfNeeded("/update", "POST", "INFO",
-            new Timestamp(System.currentTimeMillis()),
+    logService.printLogIfNeeded(
+            "/update",
+            "POST",
+            "INFO",
             "received User fields: id="
                     + currentUser.getId()
                     + ", username="
