@@ -19,8 +19,14 @@ public class ChatRestMessage implements RestMessageObject {
   @Override
   public String toString() {
     return "ChatRestMessage{" +
-            "message=" + message.toString() +
-            ", client=" + client.toString() +
+            "message=" +
+            ((message != null)
+                    ? message.toString()
+                    : "null") +
+            ", client=" +
+            ((client != null)
+                    ? client.toString()
+                    : "null") +
             '}';
   }
 
