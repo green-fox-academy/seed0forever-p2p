@@ -95,9 +95,10 @@ public class MainController {
   public String saveMessage(Message message) {
     message.setUsername(userService.findUser(1L).getUsername());
     message.createAndSetNewTimestamp();
-    broadcastService.forwardMessage(message);
 
     messageService.saveWithoutIdCollision(message);
+
+    broadcastService.forwardMessage(message);
 
     return "redirect:/";
   }
