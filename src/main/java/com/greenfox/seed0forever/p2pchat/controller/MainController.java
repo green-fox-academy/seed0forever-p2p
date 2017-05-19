@@ -1,10 +1,8 @@
 package com.greenfox.seed0forever.p2pchat.controller;
 
-import com.greenfox.seed0forever.p2pchat.model.ChatClient;
 import com.greenfox.seed0forever.p2pchat.model.Message;
 import com.greenfox.seed0forever.p2pchat.model.User;
-import com.greenfox.seed0forever.p2pchat.model.rest.ChatRestMessage;
-import com.greenfox.seed0forever.p2pchat.model.rest.OkRestMessage;
+import com.greenfox.seed0forever.p2pchat.service.BroadcastService;
 import com.greenfox.seed0forever.p2pchat.service.LogService;
 import com.greenfox.seed0forever.p2pchat.service.MessageService;
 import com.greenfox.seed0forever.p2pchat.service.UserService;
@@ -14,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.client.RestTemplate;
 
 @Controller
 @RequestMapping("/")
@@ -27,19 +24,20 @@ public class MainController {
   // read from environment variable CHAT_APP_PEER_ADDRESSS
   private String chatAppPeerAddress;
 
+  private BroadcastService broadcastService;
   private LogService logService;
   private UserService userService;
   private MessageService messageService;
-  private RestTemplate restTemplate;
 
   @Autowired
-  public MainController(LogService logService, UserService userService,
+  public MainController(BroadcastService broadcastService, LogService logService,
+          UserService userService,
           MessageService messageService) {
     super();
+    this.broadcastService = broadcastService;
     this.logService = logService;
     this.userService = userService;
     this.messageService = messageService;
-    this.restTemplate = new RestTemplate();
 
     this.chatAppUniqueId = System.getenv("CHAT_APP_UNIQUE_ID");
     this.chatAppPeerAddress = System.getenv("CHAT_APP_PEER_ADDRESS");
@@ -99,21 +97,7 @@ public class MainController {
     message.createAndSetNewTimestamp();
     messageService.save(message);
 
-    ChatRestMessage sentMessage = new ChatRestMessage(message,
-            new ChatClient(chatAppUniqueId));
-
-    String url = chatAppPeerAddress;
-    OkRestMessage testPostResponse = restTemplate
-            .postForObject(url, sentMessage, OkRestMessage.class);
-
-    logService.printLogIfNeeded(
-            "/save-message",
-            "POST response",
-            "INFO",
-            "sent POST request to "
-                    + url
-                    + ", message = " + sentMessage.toString()
-                    + ", response = " + testPostResponse.toString());
+    broadcastService.forwardMessage(message);
 
     return "redirect:/";
   }

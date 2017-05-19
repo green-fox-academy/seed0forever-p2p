@@ -3,6 +3,7 @@ package com.greenfox.seed0forever.p2pchat.controller;
 import com.greenfox.seed0forever.p2pchat.model.rest.ChatRestMessage;
 import com.greenfox.seed0forever.p2pchat.model.rest.OkRestMessage;
 import com.greenfox.seed0forever.p2pchat.model.rest.RestMessageObject;
+import com.greenfox.seed0forever.p2pchat.service.BroadcastService;
 import com.greenfox.seed0forever.p2pchat.service.LogService;
 import com.greenfox.seed0forever.p2pchat.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +18,29 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin("*")
 public class MessageRestController {
 
+  // GitHub username of app developer
+  // read from environment variable CHAT_APP_UNIQUE_ID
+  private String chatAppUniqueId;
+  // Heroku URL address of an other chat application
+  // read from environment variable CHAT_APP_PEER_ADDRESSS
+  private String chatAppPeerAddress;
+
+
+  private BroadcastService broadcastService;
   private LogService logService;
   private MessageService messageService;
 
   @Autowired
-  public MessageRestController(LogService logService,
+  public MessageRestController(
+          BroadcastService broadcastService,
+          LogService logService,
           MessageService messageService) {
+    this.broadcastService = broadcastService;
     this.logService = logService;
     this.messageService = messageService;
+
+    this.chatAppUniqueId = System.getenv("CHAT_APP_UNIQUE_ID");
+    this.chatAppPeerAddress = System.getenv("CHAT_APP_PEER_ADDRESS");
   }
 
   @PostMapping("/receive")
@@ -36,6 +52,16 @@ public class MessageRestController {
             receivedRestMessage.toString());
 
     messageService.save(receivedRestMessage.getMessage());
+
+    boolean messageIsFromThisClient = receivedRestMessage
+            .getClient()
+            .getId()
+            .equalsIgnoreCase(chatAppUniqueId);
+
+    if (!messageIsFromThisClient) {
+      broadcastService.forwardMessage(receivedRestMessage);
+    }
+
     return new OkRestMessage("ok");
   }
 }
