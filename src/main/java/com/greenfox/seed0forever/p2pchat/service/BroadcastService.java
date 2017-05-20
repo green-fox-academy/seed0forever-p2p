@@ -25,8 +25,12 @@ public class BroadcastService {
 
   @Autowired
   public BroadcastService(LogService logService) {
-    this.chatAppUniqueId = System.getenv("CHAT_APP_UNIQUE_ID");
-    this.chatAppPeerAddress = System.getenv("CHAT_APP_PEER_ADDRESS");
+
+    this.chatAppUniqueId =
+            System.getenv("CHAT_APP_UNIQUE_ID");
+
+    this.chatAppPeerAddress =
+            System.getenv("CHAT_APP_PEER_ADDRESS");
 
     this.chatClient = new ChatClient(chatAppUniqueId);
     this.restTemplate = new RestTemplate();

@@ -91,13 +91,14 @@ public class MainController {
 
   @PostMapping("/save-message")
   public String saveMessage(Message message) {
-    message.setUsername(userService.findUser(1L).getUsername());
+    message.setUsername(
+            userService.findUser(1L).getUsername());
+
     message.createAndSetNewTimestamp();
 
     broadcastService.forwardMessage(message);
 
     messageService.saveWithoutIdCollision(message);
-
 
     return "redirect:/";
   }
