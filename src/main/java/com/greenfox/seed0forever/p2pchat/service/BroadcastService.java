@@ -3,7 +3,7 @@ package com.greenfox.seed0forever.p2pchat.service;
 import com.greenfox.seed0forever.p2pchat.model.ChatClient;
 import com.greenfox.seed0forever.p2pchat.model.Message;
 import com.greenfox.seed0forever.p2pchat.model.rest.ChatRestMessage;
-import com.greenfox.seed0forever.p2pchat.model.rest.OkRestMessage;
+import com.greenfox.seed0forever.p2pchat.model.rest.ErrorRestMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -49,8 +49,8 @@ public class BroadcastService {
   public void forwardMessage(ChatRestMessage chatRestMessage) {
     String url = chatAppPeerAddress;
 
-    OkRestMessage testPostResponse = restTemplate
-            .postForObject(url, chatRestMessage, OkRestMessage.class);
+    ErrorRestMessage testPostResponse = restTemplate
+            .postForObject(url, chatRestMessage, ErrorRestMessage.class);
 
     logService.printLogIfNeeded(
             "/save-message",
