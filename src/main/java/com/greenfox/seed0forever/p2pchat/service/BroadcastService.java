@@ -32,6 +32,7 @@ public class BroadcastService {
     this.chatAppPeerAddress =
             System.getenv("CHAT_APP_PEER_ADDRESS");
 
+    this.logService = logService;
     this.chatClient = new ChatClient(chatAppUniqueId);
     this.restTemplate = new RestTemplate();
   }
@@ -46,12 +47,11 @@ public class BroadcastService {
   }
 
   public void forwardMessage(ChatRestMessage chatRestMessage) {
-
     String url = chatAppPeerAddress;
+
     OkRestMessage testPostResponse = restTemplate
             .postForObject(url, chatRestMessage, OkRestMessage.class);
 
-/*
     logService.printLogIfNeeded(
             "/save-message",
             "POST response",
@@ -60,6 +60,5 @@ public class BroadcastService {
                     + url
                     + ", message = " + chatRestMessage.toString()
                     + ", response = " + testPostResponse.toString());
-*/
   }
 }
