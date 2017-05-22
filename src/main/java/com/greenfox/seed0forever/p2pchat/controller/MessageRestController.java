@@ -1,12 +1,14 @@
 package com.greenfox.seed0forever.p2pchat.controller;
 
 import com.greenfox.seed0forever.p2pchat.model.rest.ChatRestMessage;
+import com.greenfox.seed0forever.p2pchat.model.rest.ErrorRestMessage;
 import com.greenfox.seed0forever.p2pchat.model.rest.OkRestMessage;
 import com.greenfox.seed0forever.p2pchat.model.rest.RestMessageObject;
-import com.greenfox.seed0forever.p2pchat.service.BroadcastService;
+import com.greenfox.seed0forever.p2pchat.service.ChatRestMessageService;
 import com.greenfox.seed0forever.p2pchat.service.LogService;
-import com.greenfox.seed0forever.p2pchat.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,51 +20,45 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin("*")
 public class MessageRestController {
 
-  // GitHub username of app developer
-  // read from environment variable CHAT_APP_UNIQUE_ID
-  private String chatAppUniqueId;
-  // Heroku URL address of an other chat application
-  // read from environment variable CHAT_APP_PEER_ADDRESSS
-  private String chatAppPeerAddress;
-
-
-  private BroadcastService broadcastService;
+  private ChatRestMessageService chatRestMessageService;
   private LogService logService;
-  private MessageService messageService;
 
   @Autowired
   public MessageRestController(
-          BroadcastService broadcastService,
-          LogService logService,
-          MessageService messageService) {
-    this.broadcastService = broadcastService;
+          ChatRestMessageService chatRestMessageService,
+          LogService logService) {
+    this.chatRestMessageService = chatRestMessageService;
     this.logService = logService;
-    this.messageService = messageService;
-
-    this.chatAppUniqueId = System.getenv("CHAT_APP_UNIQUE_ID");
-    this.chatAppPeerAddress = System.getenv("CHAT_APP_PEER_ADDRESS");
   }
 
   @PostMapping("/receive")
-  public RestMessageObject receiveMessage(@RequestBody ChatRestMessage receivedRestMessage) {
+  public ResponseEntity<?> receiveMessage(
+          @RequestBody ChatRestMessage receivedRestMessage) {
+
+    boolean messageExists = receivedRestMessage != null;
+
     logService.printLogIfNeeded(
             "/api/message/receive",
             "POST",
             "INFO",
-            receivedRestMessage.toString());
+            messageExists
+                    ? receivedRestMessage.toString()
+                    : "[no message received by receiveMessage()");
 
+    if (messageExists) {
+      chatRestMessageService.forwardAndSave(receivedRestMessage);
+      return new ResponseEntity<>(
+              new OkRestMessage("ok"),
+              HttpStatus.OK);
 
-    boolean messageIsFromThisClient = receivedRestMessage
-            .getClient()
-            .getId()
-            .equalsIgnoreCase(chatAppUniqueId);
-
-    if (!messageIsFromThisClient) {
-      broadcastService.forwardMessage(receivedRestMessage);
+    } else {
+      RestMessageObject errorRestMessage =
+              new ErrorRestMessage(
+                      "error",
+                      "Missing objects");
+      return new ResponseEntity<>(
+              errorRestMessage,
+              HttpStatus.UNAUTHORIZED);
     }
-
-    messageService.saveWithoutIdCollision(receivedRestMessage.getMessage());
-
-    return new OkRestMessage("ok");
   }
 }
