@@ -58,7 +58,7 @@ public class MessageRestController {
                       "Missing objects");
       return new ResponseEntity<>(
               errorRestMessage,
-              HttpStatus.UNAUTHORIZED);
+              HttpStatus.BAD_REQUEST);
     }
   }
 }
