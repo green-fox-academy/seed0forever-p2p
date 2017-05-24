@@ -5,7 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.Valid;
-import javax.validation.constraints.Digits;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -17,7 +18,8 @@ public class Message {
   private static final long RANDOM_ID_UPPER_BOUND_EXCLUSIVE = 10000000L;
 
   @Id
-  @Digits(integer = 7, fraction = 0)
+  @Min(1000000L)
+  @Max(9999999L)
   private long id;
 
   @NotNull
