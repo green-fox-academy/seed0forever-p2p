@@ -50,9 +50,9 @@ public class BroadcastService {
   public void forwardMessage(ChatRestMessage chatRestMessage) {
     String url = chatAppPeerAddress;
 
-    ResponseEntity<String> responseOfRestTemplate = restTemplate
-            .postForEntity(
-                    url, chatRestMessage, String.class);
+//    ResponseEntity<String> responseOfRestTemplate = restTemplate
+//            .postForEntity(
+//                    url, chatRestMessage, String.class);
 
     logService.printLogIfNeeded(
             "/save-message",
@@ -61,6 +61,7 @@ public class BroadcastService {
             "sent POST request to "
                     + url
                     + ", message = " + chatRestMessage.toString()
-                    + ", response = " + responseOfRestTemplate.toString());
+//                    + ", response = " + responseOfRestTemplate.toString()
+    );
   }
 }
