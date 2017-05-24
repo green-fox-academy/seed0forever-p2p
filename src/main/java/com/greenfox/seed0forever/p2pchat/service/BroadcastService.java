@@ -3,15 +3,20 @@ package com.greenfox.seed0forever.p2pchat.service;
 import com.greenfox.seed0forever.p2pchat.model.ChatClient;
 import com.greenfox.seed0forever.p2pchat.model.Message;
 import com.greenfox.seed0forever.p2pchat.model.rest.ChatRestMessage;
+import com.greenfox.seed0forever.p2pchat.model.rest.ErrorRestMessage;
+import com.greenfox.seed0forever.p2pchat.model.rest.RestMessageObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
 public class BroadcastService {
+
+  private final ChatClient chatClient;
+  private final RestTemplate restTemplate;
+  private final LogService logService;
 
   // GitHub username of app developer
   // read from environment variable CHAT_APP_UNIQUE_ID
@@ -20,14 +25,13 @@ public class BroadcastService {
   // read from environment variable CHAT_APP_PEER_ADDRESSS
   private String chatAppPeerAddress;
 
-  private final ChatClient chatClient;
-  private final RestTemplate restTemplate;
-  private final LogService logService;
-
   @Autowired
   public BroadcastService(
           LogService logService,
           RestTemplateBuilder restTemplateBuilder) {
+    this.logService = logService;
+    this.chatClient = new ChatClient(chatAppUniqueId);
+    this.restTemplate = restTemplateBuilder.build();
 
     this.chatAppUniqueId =
             System.getenv("CHAT_APP_UNIQUE_ID");
@@ -35,9 +39,6 @@ public class BroadcastService {
     this.chatAppPeerAddress =
             System.getenv("CHAT_APP_PEER_ADDRESS");
 
-    this.logService = logService;
-    this.chatClient = new ChatClient(chatAppUniqueId);
-    this.restTemplate = restTemplateBuilder.build();
   }
 
   public void forwardMessage(Message message) {
@@ -54,9 +55,9 @@ public class BroadcastService {
     String url = chatAppPeerAddress;
 
     try {
-      ResponseEntity<String> responseOfRestTemplate = restTemplate
-              .postForEntity(
-                      url, chatRestMessage, String.class);
+      RestMessageObject messagePostResponse
+              = restTemplate.postForObject(
+              url, chatRestMessage, ErrorRestMessage.class);
     } catch (RestClientException e) {
       System.out.println("RestTemplate exception caught");
     }
@@ -68,7 +69,7 @@ public class BroadcastService {
             "sent POST request to "
                     + url
                     + ", message = " + chatRestMessage.toString()
-//                    + ", response = " + responseOfRestTemplate.toString()
+//                    + ", response = " + messagePostResponse.toString()
     );
   }
 }

@@ -1,5 +1,8 @@
 package com.greenfox.seed0forever.p2pchat.model.rest;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OkRestMessage implements RestMessageObject {
 
   private String status;
