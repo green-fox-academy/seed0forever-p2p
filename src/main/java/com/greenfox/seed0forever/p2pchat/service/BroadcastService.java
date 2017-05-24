@@ -39,9 +39,10 @@ public class BroadcastService {
 
   public void forwardMessage(Message message) {
 
-    ChatRestMessage chatRestMessage = new ChatRestMessage(
-            message,
-            chatClient);
+    ChatRestMessage chatRestMessage =
+            new ChatRestMessage(
+                    message,
+                    chatClient);
 
     forwardMessage(chatRestMessage);
   }
@@ -50,7 +51,8 @@ public class BroadcastService {
     String url = chatAppPeerAddress;
 
     ErrorRestMessage testPostResponse = restTemplate
-            .postForObject(url, chatRestMessage, ErrorRestMessage.class);
+            .postForObject(
+                    url, chatRestMessage, ErrorRestMessage.class);
 
     logService.printLogIfNeeded(
             "/save-message",
