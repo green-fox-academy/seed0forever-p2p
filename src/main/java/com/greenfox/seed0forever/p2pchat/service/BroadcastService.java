@@ -4,6 +4,7 @@ import com.greenfox.seed0forever.p2pchat.model.ChatClient;
 import com.greenfox.seed0forever.p2pchat.model.Message;
 import com.greenfox.seed0forever.p2pchat.model.rest.ChatRestMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -19,13 +20,14 @@ public class BroadcastService {
   // read from environment variable CHAT_APP_PEER_ADDRESSS
   private String chatAppPeerAddress;
 
-  private ChatClient chatClient;
-  private RestTemplate restTemplate;
-
-  private LogService logService;
+  private final ChatClient chatClient;
+  private final RestTemplate restTemplate;
+  private final LogService logService;
 
   @Autowired
-  public BroadcastService(LogService logService) {
+  public BroadcastService(
+          LogService logService,
+          RestTemplateBuilder restTemplateBuilder) {
 
     this.chatAppUniqueId =
             System.getenv("CHAT_APP_UNIQUE_ID");
@@ -35,7 +37,7 @@ public class BroadcastService {
 
     this.logService = logService;
     this.chatClient = new ChatClient(chatAppUniqueId);
-    this.restTemplate = new RestTemplate();
+    this.restTemplate = restTemplateBuilder.build();
   }
 
   public void forwardMessage(Message message) {
