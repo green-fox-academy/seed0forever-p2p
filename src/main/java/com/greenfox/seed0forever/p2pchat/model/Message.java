@@ -35,14 +35,14 @@ public class Message {
   private Timestamp timestamp;
 
   public Message() {
+    this.id = generateRandomId();
+    this.timestamp = new Timestamp(System.currentTimeMillis());
   }
 
   public Message(String username, String text) {
     this();
-    this.id = generateRandomId();
     this.username = username;
     this.text = text;
-    this.timestamp = new Timestamp(System.currentTimeMillis());
   }
 
   @Override
