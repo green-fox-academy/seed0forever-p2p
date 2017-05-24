@@ -58,8 +58,10 @@ public class BroadcastService {
       RestMessageObject messagePostResponse
               = restTemplate.postForObject(
               url, chatRestMessage, ErrorRestMessage.class);
-    } catch (RestClientException e) {
-      System.out.println("RestTemplate exception caught");
+    } catch (RestClientException exception) {
+      System.out.println(
+              "RestTemplate exception caught: "
+              + exception.getMessage());
     }
 
     logService.printLogIfNeeded(
