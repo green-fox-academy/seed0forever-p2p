@@ -2,10 +2,16 @@ package com.greenfox.seed0forever.p2pchat.model.rest;
 
 import com.greenfox.seed0forever.p2pchat.model.ChatClient;
 import com.greenfox.seed0forever.p2pchat.model.Message;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 public class ChatRestMessage implements RestMessageObject {
 
+  @Valid
+  @NotNull
   Message message;
+  @Valid
+  @NotNull
   ChatClient client;
 
   public ChatRestMessage() {

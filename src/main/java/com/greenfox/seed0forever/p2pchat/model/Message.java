@@ -4,6 +4,10 @@ import java.sql.Timestamp;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "chat_message")
@@ -13,22 +17,30 @@ public class Message {
   private static final long RANDOM_ID_UPPER_BOUND_EXCLUSIVE = 10000000L;
 
   @Id
+  @Digits(integer = 7, fraction = 0)
   private long id;
 
+  @NotNull
+  @Size(min = 1)
   private String username;
+
+  @NotNull
+  @Size(min = 1)
   private String text;
+
+  @Valid
+  @NotNull
   private Timestamp timestamp;
 
   public Message() {
-    this.id = generateRandomId();
-    this.timestamp = new Timestamp(System.currentTimeMillis());
   }
 
   public Message(String username, String text) {
     this();
-
+    this.id = generateRandomId();
     this.username = username;
     this.text = text;
+    this.timestamp = new Timestamp(System.currentTimeMillis());
   }
 
   @Override

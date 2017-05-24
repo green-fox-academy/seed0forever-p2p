@@ -6,10 +6,15 @@ import com.greenfox.seed0forever.p2pchat.model.rest.OkRestMessage;
 import com.greenfox.seed0forever.p2pchat.model.rest.RestMessageObject;
 import com.greenfox.seed0forever.p2pchat.service.ChatRestMessageService;
 import com.greenfox.seed0forever.p2pchat.service.LogService;
+import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,9 +36,30 @@ public class MessageRestController {
     this.logService = logService;
   }
 
-  @PostMapping("/receive")
+  @RequestMapping(produces = "application/json")
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<RestMessageObject> handleInvalidMessageReceived(
+          MethodArgumentNotValidException exception) {
+
+    String missingFields = "Missing fields(s): ";
+    List<FieldError> fieldErrors =
+            exception.getBindingResult().getFieldErrors();
+
+    missingFields += fieldErrors.get(0).getField();
+    for (int i = 1; i < fieldErrors.size(); i++) {
+      FieldError fieldError = fieldErrors.get(i);
+      missingFields += ", ";
+      missingFields += fieldError.getField();
+    }
+
+    return new ResponseEntity<>(
+            new ErrorRestMessage("error", missingFields),
+            HttpStatus.BAD_REQUEST);
+  }
+
+  @PostMapping(value = "/receive", consumes = "application/json")
   public ResponseEntity<?> receiveMessage(
-          @RequestBody ChatRestMessage receivedRestMessage) {
+          @Valid @RequestBody ChatRestMessage receivedRestMessage) {
 
     boolean messageExists = receivedRestMessage != null;
 
@@ -47,6 +73,7 @@ public class MessageRestController {
 
     if (messageExists) {
       chatRestMessageService.forwardAndSave(receivedRestMessage);
+
       return new ResponseEntity<>(
               new OkRestMessage("ok"),
               HttpStatus.OK);
