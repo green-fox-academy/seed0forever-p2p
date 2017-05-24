@@ -99,7 +99,7 @@ public class Message {
     this.id = generateRandomId();
   }
 
-  public void createAndSetNewTimestamp() {
+  public void generateNewTimestampNow() {
     this.timestamp = new Timestamp(System.currentTimeMillis());
   }
 }

@@ -94,7 +94,7 @@ public class MainController {
     message.setUsername(
             userService.findUser(1L).getUsername());
 
-    message.createAndSetNewTimestamp();
+    message.generateNewTimestampNow();
 
     broadcastService.forwardMessage(message);
 
