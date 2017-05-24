@@ -6,6 +6,7 @@ import com.greenfox.seed0forever.p2pchat.model.rest.ChatRestMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -50,9 +51,13 @@ public class BroadcastService {
   public void forwardMessage(ChatRestMessage chatRestMessage) {
     String url = chatAppPeerAddress;
 
-//    ResponseEntity<String> responseOfRestTemplate = restTemplate
-//            .postForEntity(
-//                    url, chatRestMessage, String.class);
+    try {
+      ResponseEntity<String> responseOfRestTemplate = restTemplate
+              .postForEntity(
+                      url, chatRestMessage, String.class);
+    } catch (RestClientException e) {
+      System.out.println("RestTemplate exception caught");
+    }
 
     logService.printLogIfNeeded(
             "/save-message",
