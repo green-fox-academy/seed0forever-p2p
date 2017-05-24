@@ -3,8 +3,8 @@ package com.greenfox.seed0forever.p2pchat.service;
 import com.greenfox.seed0forever.p2pchat.model.ChatClient;
 import com.greenfox.seed0forever.p2pchat.model.Message;
 import com.greenfox.seed0forever.p2pchat.model.rest.ChatRestMessage;
-import com.greenfox.seed0forever.p2pchat.model.rest.ErrorRestMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -50,9 +50,9 @@ public class BroadcastService {
   public void forwardMessage(ChatRestMessage chatRestMessage) {
     String url = chatAppPeerAddress;
 
-    ErrorRestMessage testPostResponse = restTemplate
-            .postForObject(
-                    url, chatRestMessage, ErrorRestMessage.class);
+    ResponseEntity<String> responseOfRestTemplate = restTemplate
+            .postForEntity(
+                    url, chatRestMessage, String.class);
 
     logService.printLogIfNeeded(
             "/save-message",
@@ -61,6 +61,6 @@ public class BroadcastService {
             "sent POST request to "
                     + url
                     + ", message = " + chatRestMessage.toString()
-                    + ", response = " + testPostResponse.toString());
+                    + ", response = " + responseOfRestTemplate.toString());
   }
 }
