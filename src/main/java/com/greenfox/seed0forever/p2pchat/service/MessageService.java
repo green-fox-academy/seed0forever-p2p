@@ -50,7 +50,7 @@ public class MessageService {
             .findAllByUsernameAndTimestamp(username, timestamp);
     boolean messageExists =
             filteredMessages != null
-                    && filteredMessages.size() >= 2;
+                    && filteredMessages.size() >= 1;
     return messageExists;
   }
 }
