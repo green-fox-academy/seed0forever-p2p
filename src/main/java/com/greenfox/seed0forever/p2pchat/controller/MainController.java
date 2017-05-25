@@ -1,5 +1,6 @@
 package com.greenfox.seed0forever.p2pchat.controller;
 
+import com.greenfox.seed0forever.p2pchat.model.ChatClient;
 import com.greenfox.seed0forever.p2pchat.model.Message;
 import com.greenfox.seed0forever.p2pchat.model.User;
 import com.greenfox.seed0forever.p2pchat.service.BroadcastService;
@@ -96,7 +97,7 @@ public class MainController {
 
     message.generateNewTimestampNow();
 
-    broadcastService.forwardMessage(message);
+    broadcastService.forwardMessage(message, new ChatClient(chatAppUniqueId));
 
     messageService.saveWithoutIdCollision(message);
 

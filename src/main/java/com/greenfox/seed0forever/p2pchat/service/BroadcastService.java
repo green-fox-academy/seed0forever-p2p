@@ -41,12 +41,13 @@ public class BroadcastService {
 
   }
 
-  public void forwardMessage(Message message) {
+  public void forwardMessage(Message message,
+          ChatClient client) {
 
     ChatRestMessage chatRestMessage =
             new ChatRestMessage(
                     message,
-                    chatClient);
+                    client);
 
     forwardMessage(chatRestMessage);
   }
