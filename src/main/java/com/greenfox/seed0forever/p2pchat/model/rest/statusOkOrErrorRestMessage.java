@@ -3,15 +3,15 @@ package com.greenfox.seed0forever.p2pchat.model.rest;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ErrorRestMessage implements RestMessageObject {
+public class statusOkOrErrorRestMessage implements RestMessageObject {
 
   private String status;
   private String message;
 
-  public ErrorRestMessage() {
+  public statusOkOrErrorRestMessage() {
   }
 
-  public ErrorRestMessage(String status, String message) {
+  public statusOkOrErrorRestMessage(String status, String message) {
     this.status = status;
     this.message = message;
   }
