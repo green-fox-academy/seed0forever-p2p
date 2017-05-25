@@ -65,7 +65,7 @@ public class BroadcastService {
     }
 
     logService.printLogIfNeeded(
-            "/save-message",
+            "[BroadcastService]",
             "POST response",
             "INFO",
             "sent POST request to "
