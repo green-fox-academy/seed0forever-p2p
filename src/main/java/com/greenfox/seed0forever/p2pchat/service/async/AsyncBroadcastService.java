@@ -2,7 +2,7 @@ package com.greenfox.seed0forever.p2pchat.service.async;
 
 import com.greenfox.seed0forever.p2pchat.model.rest.ChatRestMessage;
 import com.greenfox.seed0forever.p2pchat.model.rest.RestMessageObject;
-import com.greenfox.seed0forever.p2pchat.model.rest.statusOkOrErrorRestMessage;
+import com.greenfox.seed0forever.p2pchat.model.rest.StatusOkOrErrorRestMessage;
 import com.greenfox.seed0forever.p2pchat.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -37,7 +37,7 @@ public class AsyncBroadcastService {
     RestMessageObject messagePostResponse;
     try {
       messagePostResponse = restTemplate
-              .postForObject(url, chatRestMessage, statusOkOrErrorRestMessage.class);
+              .postForObject(url, chatRestMessage, StatusOkOrErrorRestMessage.class);
 
       logService.printLogIfNeeded("[AsyncBroadcastService]",
               "POST",

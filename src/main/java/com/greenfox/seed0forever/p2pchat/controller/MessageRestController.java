@@ -3,7 +3,7 @@ package com.greenfox.seed0forever.p2pchat.controller;
 import com.greenfox.seed0forever.p2pchat.model.rest.ChatRestMessage;
 import com.greenfox.seed0forever.p2pchat.model.rest.OkRestMessage;
 import com.greenfox.seed0forever.p2pchat.model.rest.RestMessageObject;
-import com.greenfox.seed0forever.p2pchat.model.rest.statusOkOrErrorRestMessage;
+import com.greenfox.seed0forever.p2pchat.model.rest.StatusOkOrErrorRestMessage;
 import com.greenfox.seed0forever.p2pchat.service.ChatRestMessageService;
 import com.greenfox.seed0forever.p2pchat.service.LogService;
 import java.util.List;
@@ -53,7 +53,7 @@ public class MessageRestController {
     }
 
     return new ResponseEntity<>(
-            new statusOkOrErrorRestMessage("error", missingFields),
+            new StatusOkOrErrorRestMessage("error", missingFields),
             HttpStatus.BAD_REQUEST);
   }
 
@@ -79,12 +79,12 @@ public class MessageRestController {
               HttpStatus.OK);
 
     } else {
-      RestMessageObject errorRestMessage =
-              new statusOkOrErrorRestMessage(
+      RestMessageObject statusOkOrErrorRestMessage =
+              new StatusOkOrErrorRestMessage(
                       "error",
                       "Missing objects");
       return new ResponseEntity<>(
-              errorRestMessage,
+              statusOkOrErrorRestMessage,
               HttpStatus.BAD_REQUEST);
     }
   }

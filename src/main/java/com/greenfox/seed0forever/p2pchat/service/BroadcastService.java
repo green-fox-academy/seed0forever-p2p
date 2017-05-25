@@ -4,7 +4,7 @@ import com.greenfox.seed0forever.p2pchat.model.ChatClient;
 import com.greenfox.seed0forever.p2pchat.model.Message;
 import com.greenfox.seed0forever.p2pchat.model.rest.ChatRestMessage;
 import com.greenfox.seed0forever.p2pchat.model.rest.RestMessageObject;
-import com.greenfox.seed0forever.p2pchat.model.rest.statusOkOrErrorRestMessage;
+import com.greenfox.seed0forever.p2pchat.model.rest.StatusOkOrErrorRestMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
@@ -57,7 +57,7 @@ public class BroadcastService {
     try {
       RestMessageObject messagePostResponse
               = restTemplate.postForObject(
-              url, chatRestMessage, statusOkOrErrorRestMessage.class);
+              url, chatRestMessage, StatusOkOrErrorRestMessage.class);
     } catch (RestClientException exception) {
       System.out.println(
               "RestTemplate exception caught: "
