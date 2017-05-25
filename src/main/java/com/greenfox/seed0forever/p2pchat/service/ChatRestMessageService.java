@@ -45,9 +45,12 @@ public class ChatRestMessageService {
 
     if (!messageIsFromThisClient
             && !messageAlreadySaved) {
+
       asyncBroadcastService.forwardMessage(receivedRestMessage);
+      messageService.saveWithoutIdCollision(receivedRestMessage.getMessage());
 
     } else if (messageAlreadySaved) {
+
       logService.printLogIfNeeded(
               "[ChatRestMessageService]",
               "asyncBroadcastService.forwardMessage",
@@ -55,6 +58,7 @@ public class ChatRestMessageService {
               "filtered message, already exists: "
                       + ", message = ");
     } else {
+
       messageService.saveWithoutIdCollision(receivedRestMessage.getMessage());
 
       logService.printLogIfNeeded(
