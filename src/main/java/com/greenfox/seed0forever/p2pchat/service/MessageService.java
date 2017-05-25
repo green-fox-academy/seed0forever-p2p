@@ -18,10 +18,27 @@ public class MessageService {
   }
 
   public void saveWithoutIdCollision(Message message) {
-    while (messageRepository.exists(message.getId())) {
-      message.generateAndSetRandomId();
+    Message copyOfMessage = copyMessage(message);
+
+    while (messageRepository.exists(copyOfMessage.getId())) {
+      copyOfMessage.generateAndSetRandomId();
     }
-    messageRepository.save(message);
+    messageRepository.save(copyOfMessage);
+  }
+
+  private Message copyMessage(Message message) {
+    long receivedId = message.getId();
+    String receivedUsername = message.getUsername();
+    String receivedText = message.getText();
+    Timestamp receivedTimestamp = new Timestamp(message.getTimestamp().getTime());
+
+    Message copyOfMessage = new Message();
+    copyOfMessage.setId(receivedId);
+    copyOfMessage.setUsername(receivedUsername);
+    copyOfMessage.setText(receivedText);
+    copyOfMessage.setTimestamp(receivedTimestamp);
+
+    return copyOfMessage;
   }
 
   public List<Message> listAll() {
