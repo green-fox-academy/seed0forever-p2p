@@ -53,4 +53,13 @@ public class MessageService {
                     && filteredMessages.size() >= 1;
     return messageExists;
   }
+
+  public boolean existByUserAndText(String username, String text) {
+    List<Message> filteredMessages = messageRepository
+            .findAllByUsernameAndText(username, text);
+    boolean messageExists =
+            filteredMessages != null
+                    && filteredMessages.size() >= 1;
+    return messageExists;
+  }
 }

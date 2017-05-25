@@ -38,10 +38,20 @@ public class ChatRestMessageService {
             .getClient()
             .getId()
             .equalsIgnoreCase(chatAppUniqueId);
+
     Message message = receivedRestMessage.getMessage();
-    boolean messageAlreadySaved = messageService.existsByUserAndTime(
-            message.getUsername(),
-            message.getTimestamp());
+
+    boolean messageExistsByUserAndTime =
+            messageService.existsByUserAndTime(
+                    message.getUsername(),
+                    message.getTimestamp());
+    boolean messageExistsByUserAndText =
+            messageService.existByUserAndText(
+                    message.getUsername(),
+                    message.getText());
+
+    boolean messageAlreadySaved =
+            messageExistsByUserAndTime || messageExistsByUserAndText;
 
     if (!messageIsFromThisClient
             && !messageAlreadySaved) {
