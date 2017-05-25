@@ -16,6 +16,14 @@ public class ErrorRestMessage implements RestMessageObject {
     this.message = message;
   }
 
+  @Override
+  public String toString() {
+    return "ErrorRestMessage{" +
+            "status='" + status + '\'' +
+            ", message='" + message + '\'' +
+            '}';
+  }
+
   public String getMessage() {
     return message;
   }
