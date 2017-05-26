@@ -4,6 +4,7 @@ import com.greenfox.seed0forever.p2pchat.model.rest.ChatRestMessage;
 import com.greenfox.seed0forever.p2pchat.model.rest.OkRestMessage;
 import com.greenfox.seed0forever.p2pchat.model.rest.RestMessageObject;
 import com.greenfox.seed0forever.p2pchat.model.rest.StatusOkOrErrorRestMessage;
+import com.greenfox.seed0forever.p2pchat.service.ChatRestAllMessagesService;
 import com.greenfox.seed0forever.p2pchat.service.ChatRestMessageService;
 import com.greenfox.seed0forever.p2pchat.service.LogService;
 import java.util.List;
@@ -15,23 +16,27 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/message")
+@RequestMapping("/api")
 @CrossOrigin("*")
 public class MessageRestController {
 
+  private ChatRestAllMessagesService chatRestAllMessagesService;
   private ChatRestMessageService chatRestMessageService;
   private LogService logService;
 
   @Autowired
   public MessageRestController(
+          ChatRestAllMessagesService chatRestAllMessagesService,
           ChatRestMessageService chatRestMessageService,
           LogService logService) {
+    this.chatRestAllMessagesService = chatRestAllMessagesService;
     this.chatRestMessageService = chatRestMessageService;
     this.logService = logService;
   }
@@ -57,7 +62,7 @@ public class MessageRestController {
             HttpStatus.BAD_REQUEST);
   }
 
-  @PostMapping(value = "/receive", consumes = "application/json")
+  @PostMapping(value = "/message/receive", consumes = "application/json")
   public ResponseEntity<?> receiveMessage(
           @Valid @RequestBody ChatRestMessage receivedRestMessage) {
 
@@ -87,5 +92,18 @@ public class MessageRestController {
               statusOkOrErrorRestMessage,
               HttpStatus.BAD_REQUEST);
     }
+  }
+
+  @GetMapping("/messages")
+  public ResponseEntity<RestMessageObject> listMessages() {
+
+    logService.printLogIfNeeded(
+            "/api/messages",
+            "GET",
+            "INFO",
+            "[incoming request received]");
+
+    return new ResponseEntity<>(
+            chatRestAllMessagesService.respondWithAllMessages(), HttpStatus.OK);
   }
 }
