@@ -26,6 +26,7 @@ public class JsonRestControllerAdvice extends ResponseEntityExceptionHandler {
     }
 
     StatusOkOrErrorRestMessage errorMessage = new StatusOkOrErrorRestMessage();
+    errorMessage.setStatus("error");
 
     if (ex.getCause() instanceof JsonMappingException) {
       JsonMappingException jsonMappingException = (JsonMappingException) ex.getCause();
