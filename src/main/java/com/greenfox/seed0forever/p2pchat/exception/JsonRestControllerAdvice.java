@@ -18,7 +18,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class JsonRestControllerAdvice extends ResponseEntityExceptionHandler {
 
   @Override
-  protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+  protected ResponseEntity<Object> handleHttpMessageNotReadable(
+          HttpMessageNotReadableException ex,
           HttpHeaders headers, HttpStatus status, WebRequest request) {
 
     if (!(ex.getCause() instanceof JsonProcessingException)) {
